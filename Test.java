@@ -5,13 +5,13 @@ public class Test {
 		System.out.println("Hello World");
 
 		Scanner scanner = new Scanner(System.in);
-		System.out.println('Enter number of students: ');
+		System.out.println("Enter number of students: ");
 		int n = scanner.nextInt();
 
 		int[] grades = new int[n];
 
 		for (int i = 0; i < n; i++) {
-			System.out.println('Enter grade for student ' + (i + 1) + ': ');
+			System.out.println("Enter grade for student " + (i + 1) + ": ");
 			grades[i] = scanner.nextInt();
 		}
 
@@ -20,6 +20,6 @@ public class Test {
 			sum += grades[i];
 		}
 
-		System.out.println('Average grade: ' + sum / n);
+		System.out.println("Average grade: " + sum / n);
 	}
 }
