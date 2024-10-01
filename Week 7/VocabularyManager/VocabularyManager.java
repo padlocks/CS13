@@ -1,9 +1,13 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VocabularyManager {
-	private ArrayList<Word> words = new ArrayList<>();
+	private final ArrayList<Word> words = new ArrayList<>();
 
-	public int findIndexOfWord(String word) {
+	private int findIndexOfWord(String word) {
 		for (Word w : this.words) {
 			// System.out.println("Comparing " + w.getWord() + " with " + word);
 			if (w.getWord().equals(word)) {
@@ -26,15 +30,6 @@ public class VocabularyManager {
 		}
 	}
 
-	public Word getWord(String word) {
-		int index = this.findIndexOfWord(word);
-		if (index >= 0) {
-			return words.get(index);
-		} else {
-			return null;
-		}
-	}
-
 	public void filterStopWords(String[] stopWords) {
 		for (String stopWord : stopWords) {
 			int index = this.findIndexOfWord(stopWord);
@@ -45,7 +40,7 @@ public class VocabularyManager {
 	}
 
 	public void sortWordsByFrequency() {
-		words.sort((word1, word2) -> word2.getFrequency() - word1.getFrequency());
+		words.sort(null);
 	}
 
 	public int getWordFrequency(String word) {
@@ -69,6 +64,31 @@ public class VocabularyManager {
 		ArrayList<Word> topWords = getTopNFrequentWords(n);
 		for (Word word : topWords) {
 			System.out.println(word.getWord() + " - " + word.getFrequency());
+		}
+	}
+
+	public void exportWordFrequency(String fileName) {
+		// Sort by frequency
+		this.sortWordsByFrequency();
+
+		try {
+			// Check if file exists
+			File f = new File (fileName);
+			if (!f.exists()) {
+				f.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(f.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			// Write to file
+			for(Word w : words) {
+				bw.write(w.toString() + System.getProperty("line.separator")); 
+			}
+
+			bw.close();
+		} catch (IOException e) {
+			System.out.println (e.toString());
 		}
 	}
 }

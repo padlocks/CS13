@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class TextParser {
-	private VocabularyManager vocabularyManager;
+	private final VocabularyManager vocabularyManager;
 
 	public TextParser(VocabularyManager vocabularyManager) {
 		this.vocabularyManager = vocabularyManager;
