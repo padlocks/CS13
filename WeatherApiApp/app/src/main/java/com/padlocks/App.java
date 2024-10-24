@@ -1,11 +1,30 @@
 package com.padlocks;
 
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.padlocks.Geocoding.GridPoint;
+import com.padlocks.Geocoding.Location;
 
 public class App {
+    private static final Logger LOGGER = Logger.getLogger(WeatherForecastApiClient.class.getName());
     public static void main(String[] args) throws JsonProcessingException {
-        WeatherForecastApiClient client = new WeatherForecastApiClient("https://api.weather.gov/gridpoints/STO/53,76/forecast");
+        // Street Address to Latitude and Longitude
+        String address = "1600 Amphitheatre Parkway, Mountain View, CA";
+        Optional<Location> location = Location.getLocation(address);
+        GridPoint gridPoint = null;
+
+        if (location.isPresent()) {
+            gridPoint = GridPoint.getGridPoint(location.get());
+        } else {
+            LOGGER.log(Level.WARNING, "Location not available for the address.");
+            System.exit(0);
+        }
+
+        WeatherForecastApiClient client = new WeatherForecastApiClient(gridPoint.toString());
         ObjectMapper objectMapper = new ObjectMapper();
 
         WeatherForecastApiResponse response = objectMapper.readValue(client.getWeatherForecast(), WeatherForecastApiResponse.class);

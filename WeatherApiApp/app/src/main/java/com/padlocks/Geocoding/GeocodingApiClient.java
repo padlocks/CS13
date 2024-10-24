@@ -1,30 +1,36 @@
-package com.padlocks;
-
-// This class will handle making an HTTP GET request to the NWS API and retrieving the JSON response.
+package com.padlocks.Geocoding;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
-public class WeatherForecastApiClient {
-	private String API_STRING = "https://api.weather.gov/gridpoints/";
+public class GeocodingApiClient {
+	private static final String BASE_URL = "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=4&format=json&address=";
+	private String address;
 
-	public WeatherForecastApiClient(String gridPoint) {
-		API_STRING = API_STRING + gridPoint + "/forecast";
+	GeocodingApiClient(String address) {
+		this.address = address;
+		this.address = URLEncoder.encode(address, StandardCharsets.UTF_8);
 	}
 
 	public String getApiString() {
-		return API_STRING;
+		return BASE_URL + this.address;
 	}
 
-	public void setApiString(String api) {
-		API_STRING = api;
+	public String getAddress() {
+		return address;
 	}
 
-	public String getWeatherForecast() {
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getLocation() {
 		HttpResponse response = sendGetRequest();
 		return response.body().toString();
 	}
